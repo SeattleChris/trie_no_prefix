@@ -1,10 +1,6 @@
 #!/bin/python3
 
-import math
 import os
-import random
-import re
-import sys
 
 FAIL = "BAD SET"
 GOOD = "GOOD SET"
@@ -19,17 +15,11 @@ class Trie:
         self.root = Node()
         
     def insert(self, key):
-        curr = self.root
-        for c in key:
-            index = ord(c) - ord('a')
-            if curr.children[index] is None:
-                curr.children[index] = Node()
-            curr = curr.children[index]
-        curr.isEndOfWord = True
+        self.add_prefix_aware(key, prefix_allowed=True)
 
-    def add_no_pre(self, key):
+    def add_prefix_aware(self, key, prefix_allowed=False):
         curr = self.root
-        at_beg = True
+        at_beg = not prefix_allowed
         for c in key:
             index = ord(c) - ord('a')
             if curr.children[index] is None:
@@ -67,7 +57,7 @@ class Trie:
 def noPrefix(words):
     tree = Trie()
     for word in words:
-        if not tree.add_no_pre(word):
+        if not tree.add_prefix_aware(word):
             return word
     return True
     
